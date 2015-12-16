@@ -1,0 +1,2 @@
+# GoBangAI
+AI for GoBang
