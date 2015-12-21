@@ -12,7 +12,8 @@
 
 #### 环境
 - window环境
-- python2.x
+- python2.7
+- [pygame 1.91](http://pygame.org/ftp/pygame-1.9.1.win32-py2.7.msi)
 
 ### 功能性需求
 #### 棋局模块
