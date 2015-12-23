@@ -1,9 +1,19 @@
 # GoBangAI
-## 项目文件夹介绍
-- Environmen
-	- 运行该项目必备的环境
-- Test
-	- 项目的测试用例
+## 项目源码文件夹介绍
+- src
+	- python代码
+- docs
+	- 文档
+- setup.py
+	- 安装代码
+- setup.bat
+	- windows下实际安装文件
+
+## 项目中间文件以及可执行程序介绍
+- build
+	- 中间文件夹
+- dist
+	- 可执行程序
 
 ## 五子棋AI需求分析说明书
 版本 **1.0**
