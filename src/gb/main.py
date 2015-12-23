@@ -1,18 +1,8 @@
 import pygame
-print pygame.ver
-
-import pygame
+import main_window
 from pygame.locals import *
-from sys import exit
+import os
 
-pygame.init()
-
-screen = pygame.display.set_mode((640, 480), 0, 32)
-pygame.display.set_caption("Hello, World!")
-
-while True:
-	for event in pygame.event.get():
-		if event.type == QUIT:
-			exit()
-
-pygame.display.update()
+if __name__ == '__main__':
+    window = main_window.MainWindow()
+    window.main_loop()
