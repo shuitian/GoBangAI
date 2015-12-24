@@ -8,18 +8,16 @@ import system.events
 import gbgui.buttons
 
 class MainWindow(object):
-	window = None
 	"""主窗口类"""
 	def __init__(self, width=640, height=480):
 		"""初始化窗口大小，标题等"""
 		super(MainWindow, self).__init__()
-		pygame.init()
 		self.width = width
 		self.height = height
 		self.screen = pygame.display.set_mode((self.width, self.height))
 		pygame.display.set_caption("GoBang!")
+		
 		self.buttons = []
-		MainWindow.window = self
 	
 	def handle_event(self):
 		"""处理事件信息"""
@@ -50,5 +48,6 @@ class MainWindow(object):
 
 if __name__ == '__main__':
 	"""实例化主窗口，并开始主循环"""
+	pygame.init()
 	window = MainWindow()
 	window.main_loop()

@@ -10,5 +10,5 @@ def get_res_path(filenames):
 	"""获取资源路径"""
 	return os.path.join(get_res_root_path(), filenames)
 
-# if __name__ == '__main__':
-# 	print get_res_path()
+if __name__ == '__main__':
+	print get_res_root_path()
