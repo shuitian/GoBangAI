@@ -1,4 +1,4 @@
- # GoBangAI
+# GoBangAI
 ### 项目源码文件夹介绍
 - src
 	- python代码
