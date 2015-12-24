@@ -15,7 +15,7 @@ class MainWindow(object):
 		self.width = width
 		self.height = height
 		self.screen = pygame.display.set_mode((self.width, self.height))
-		pygame.display.set_caption("GoBang!")
+		pygame.display.set_caption(u"五子棋".encode('utf-8'))
 		
 		self.buttons = []
 	
@@ -35,9 +35,10 @@ class MainWindow(object):
 	def set_background(self, background_image_filename):
 		"""设置窗口背景"""
 		background = pygame.image.load(background_image_filename).convert()	
+		self.screen.fill((255,255,255))
 		self.screen.blit(background, (0,0))
-		start_button = gbgui.buttons.image_button("leaf.png")
-		self.add_button(start_button, (0,0))
+		start_button = gbgui.buttons.text_button(name = "start", text = u"开始游戏")
+		self.add_button(start_button, (self.width/2 - start_button.rect.width/2, self.height/4*3 - start_button.rect.height/2))
 
 	def main_loop(self):
 		"""主循环"""

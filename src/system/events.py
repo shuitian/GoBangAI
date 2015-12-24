@@ -12,3 +12,5 @@ def press_left_mouse_button_down(window, event):
 	for x in window.buttons:
 		if x.is_over(pygame.mouse.get_pos()):
 			print x,"is pressed!"
+			if x.name == "start":
+				print "start game"
