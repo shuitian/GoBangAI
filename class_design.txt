@@ -1,0 +1,49 @@
+Game类
+
+public interface Game{
+        bool putChess(Player player,int x,int y)//该方法判断落子的玩家，落子的位置，返回落子是否成功，通过游戏规则判断游戏是否结束，协调GameBoard记录棋局，协调Displayer更新棋盘的显示
+        bool regret(Player player);//悔棋
+        void quitGame();//退出游戏
+        void startGame();//开始游戏
+        bool isBlackTurn();//是否由黑方下子
+        loadGameAItoAI();//以AI对AI模式开始
+        loadGameMantoAI();//以人对AI模式开始
+        saveGameAItoAI();//保存AI对AI模式
+        saveGameMantoAI();//保存人对AI模式
+
+     
+}
+
+GameBoard棋盘类
+
+public interface GameBoard{
+	bool putChess(int x,int y);//判断该位置是否有棋子，有返回true记录，没有不记录返回			false
+        Position goBack();//返回上一步的位置
+        int getBoardState(int x,int y);//获取指定位置是否为空，若为空返回0，不为空
+        List<Position> getALLStep;//获得当前棋局所有棋子的位置列表
+
+}
+
+Player玩家类
+public interface Player{
+	void joinGame(Game game,bool isBlack);//由Game模块调用，清除上一次的游戏状态
+	void onOpponentPut(int x,int y);//一方下子后，由Game模块通知另一方位置，另一方准备下子		
+	bool getBestmove(Gameboard gameBoard,Player AI);//根据当前的状态计算出AI最适合的下一步			
+	void onDrawGame();//游戏结束，如果平局，Game调用此接口，通知Player结束游戏
+	void onGameOver(bool isWinner);//当游戏结束，Game调用此接口通知两方结果
+	void onException();//系统发生异常，游戏提前结束，由Game调用此接口
+
+
+
+}
+
+DisPlayer棋盘显示类
+public interface DisPlayer{
+	void setGameBoard(Gameboard gameBoard);//将 GameBoard 和 Displayer 关联起			来.Displayer显示棋盘直接从关联的GameBoard那里取数据
+
+        void update();//刷新棋盘显示,当 Player下完一步棋,由Game来更新 GameBoard,同时协调Displayer刷新棋盘.			
+
+        void GameOver(String message);//游戏结束时，由Game模块调用，用于显示一段信息在屏幕
+
+
+}
