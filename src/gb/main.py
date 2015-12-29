@@ -5,5 +5,6 @@ from pygame.locals import *
 
 if __name__ == '__main__':
     """实例化主窗口，并开始主循环"""
+    pygame.init()
     window = main_window.MainWindow()
     window.main_loop()
