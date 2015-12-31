@@ -17,6 +17,7 @@ class MainWindow(object):
 		self.screen = pygame.display.set_mode((self.width, self.height), 0, 32)
 		pygame.display.set_caption(u"五子棋".encode('utf-8'))
 		
+		self.current_game = None
 		self.buttons = []
 	
 	def handle_event(self):
@@ -46,7 +47,7 @@ class MainWindow(object):
 		"""添加开始和结束按钮"""
 		start_button = gbgui.buttons.text_button(name = "start", text = u"开始游戏", click = system.events.press_start_button)
 		self.add_button(start_button, (self.width/2 - start_button.rect.width/2, self.height/4*3 - start_button.rect.height/2))
-		exit_button = gbgui.buttons.text_button(name = "start", text = u"退出游戏", click = system.events.press_exit_button)
+		exit_button = gbgui.buttons.text_button(name = "exit", text = u"退出游戏", click = system.events.press_exit_button)
 		self.add_button(exit_button, (self.width/2 - start_button.rect.width/2, self.height/6*5 - start_button.rect.height/2))
 
 	def main_loop(self):

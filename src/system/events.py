@@ -2,7 +2,9 @@
 import sys,pygame
 sys.path.append("..")
 import gb.main_window
+import gb.game
 import gbgui.game_box
+import system.player
 def press_mouse_button_down(window, event):
 	"""响应鼠标点击事件"""
 	if event.button == 1:
@@ -18,9 +20,27 @@ def press_left_mouse_button_down(window, event):
 def press_start_button(window):
 	"""开始按钮被按下"""
 	window.set_background()
+	player1 = system.player.player("alice",True)
+	player2 = system.player.player("bob",False)
+	game1 = gb.game.game(window, player1, player2)
+	game1.start_game()
 	box = gbgui.game_box.game_box(window)
 	box.draw_box()
 
 def press_exit_button(window):
 	"""退出按钮被按下"""
 	sys.exit()
+
+def press_give_up_button(window):
+	"""按下认输按钮"""
+	if not window.current_game:
+		return 
+	if not window.current_game.in_progress:
+		return 
+	else:
+		if not window.current_game.black.ai:
+			window.current_game.end_game(winner = window.current_game.white)
+		elif not window.current_game.white.ai:
+			window.current_game.end_game(winner = window.current_game.black)
+		else:
+			return

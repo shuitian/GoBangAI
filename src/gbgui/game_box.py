@@ -3,6 +3,7 @@ import sys,pygame
 sys.path.append("..")
 import system.file_path
 import gb.main_window
+import gbgui.buttons
 class game_box(object):
 	"""游戏棋盘类"""
 	def __init__(self, window, size = 700, nr_lines = 13):
@@ -17,6 +18,7 @@ class game_box(object):
 		"""在屏幕上绘制棋盘"""
 		self.draw_lines()
 		self.draw_points()
+		self.draw_buttons()
 
 	def draw_lines(self):
 		"""画线"""
@@ -47,10 +49,14 @@ class game_box(object):
 		for point in points:
 			pygame.draw.circle(self.window.screen,[0,0,0],point,radius,0)
 
-		"""for test"""
+		# """for test"""
 		# p = system.file_path.get_res_path('white_point.png')
 		# background = pygame.image.load(p).convert_alpha()
 		# self.window.screen.blit(background, [points[0][0]-18,points[0][1]-18])
+
+	def draw_buttons(self):
+		give_up_button = gbgui.buttons.text_button(name = "give_up", text = u"认输", click = system.events.press_give_up_button)
+		self.window.add_button(give_up_button, (self.window.width - (self.window.width - self.size)/4 - give_up_button.rect.width/2, self.window.height*4/5 - give_up_button.rect.height/2))
 
 	def get_screen_position_from_game_point(self, place):
 		"""根据棋盘点位置获取屏幕点位置"""
