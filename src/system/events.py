@@ -2,6 +2,7 @@
 import sys,pygame
 sys.path.append("..")
 import gb.main_window
+import gbgui.game_box
 def press_mouse_button_down(window, event):
 	"""响应鼠标点击事件"""
 	if event.button == 1:
@@ -15,28 +16,11 @@ def press_left_mouse_button_down(window, event):
 				x.on_click(window)
 
 def press_start_button(window):
-	print "start"
-	window.clear_button()
+	"""开始按钮被按下"""
 	window.set_background()
-	drawlines(window)
-
-def drawlines(window):
-	edge_color = (150,118,75)
-	line_color = (0,0,0)
-	length = 10
-	size = 720
-	nr_lines = 17
-	space = size/(nr_lines+1)
-	for x in xrange(1,nr_lines+1):
-		start_pot = ((window.width-size)/2,(window.height-size)/2 + x*space)
-		end_pot = ((window.width+size)/2,(window.height-size)/2 + x*space)
-		pygame.draw.line(window.screen, line_color, start_pot, end_pot, 2)
-
-		start_pot = ((window.width-size)/2 + x*space,(window.height-size)/2)
-		end_pot = ((window.width-size)/2 + x*space,(window.height+size)/2)
-		pygame.draw.line(window.screen, line_color, start_pot, end_pot, 2)
-	pygame.draw.rect(window.screen, edge_color, ((window.width-size)/2,(window.height-size)/2,size,size), 10)
+	box = gbgui.game_box.game_box(window)
+	box.draw_box()
 
 def press_exit_button(window):
-	print "exit"
+	"""退出按钮被按下"""
 	sys.exit()

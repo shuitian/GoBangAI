@@ -33,14 +33,17 @@ class MainWindow(object):
 		button.render(self.screen, position)
 
 	def clear_button(self):
+		"""屏幕上的所有按钮不再响应事件"""
 		self.button = []
 
 	def set_background(self, background_image_filename = system.file_path.get_res_path('background.png')):
 		"""设置窗口背景"""
+		self.clear_button()
 		background = pygame.image.load(background_image_filename).convert()	
 		self.screen.blit(background, (0,0))
 
 	def add_start_and_exit_button(self):
+		"""添加开始和结束按钮"""
 		start_button = gbgui.buttons.text_button(name = "start", text = u"开始游戏", click = system.events.press_start_button)
 		self.add_button(start_button, (self.width/2 - start_button.rect.width/2, self.height/4*3 - start_button.rect.height/2))
 		exit_button = gbgui.buttons.text_button(name = "start", text = u"退出游戏", click = system.events.press_exit_button)
