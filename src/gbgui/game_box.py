@@ -39,19 +39,25 @@ class game_box(object):
 		"""画点"""
 		radius = 5
  		points = []
-		points.append(self.get_position_from_place(((self.nr_lines+3)/2-1,(self.nr_lines+3)/2-1)))
-		points.append(self.get_position_from_place(((self.nr_lines+3)/4-1,(self.nr_lines+3)/4-1)))
-		points.append(self.get_position_from_place(((self.nr_lines+3)/4-1,(self.nr_lines+3)/4*3-1)))
-		points.append(self.get_position_from_place(((self.nr_lines+3)/4*3-1,(self.nr_lines+3)/4-1)))
-		points.append(self.get_position_from_place(((self.nr_lines+3)/4*3-1,(self.nr_lines+3)/4*3-1)))
+		points.append(self.get_screen_position_from_game_point(((self.nr_lines+3)/2-1,(self.nr_lines+3)/2-1)))
+		points.append(self.get_screen_position_from_game_point(((self.nr_lines+3)/4-1,(self.nr_lines+3)/4-1)))
+		points.append(self.get_screen_position_from_game_point(((self.nr_lines+3)/4-1,(self.nr_lines+3)/4*3-1)))
+		points.append(self.get_screen_position_from_game_point(((self.nr_lines+3)/4*3-1,(self.nr_lines+3)/4-1)))
+		points.append(self.get_screen_position_from_game_point(((self.nr_lines+3)/4*3-1,(self.nr_lines+3)/4*3-1)))
 		for point in points:
 			pygame.draw.circle(self.window.screen,[0,0,0],point,radius,0)
 
-	def get_position_from_place(self, place):
+		"""for test"""
+		# p = system.file_path.get_res_path('white_point.png')
+		# background = pygame.image.load(p).convert_alpha()
+		# self.window.screen.blit(background, [points[0][0]-18,points[0][1]-18])
+
+	def get_screen_position_from_game_point(self, place):
+		"""根据棋盘点位置获取屏幕点位置"""
 		start_pot = ((self.window.width-self.size)/2,(self.window.height-self.size)/2)
 		x = self.space * place[0] + start_pot[0]
 		y = self.space * place[1] + start_pot[1]
-		return [x,y]
+		return [x+1,y+1]
 
 
 if __name__ == '__main__':
