@@ -1,5 +1,5 @@
 #-*- coding:utf-8 –*-
-import sys,pygame
+import sys,pygame,random
 sys.path.append("..")
 import gb.main_window
 import gb.game
@@ -17,6 +17,7 @@ def press_left_mouse_button_down(window, event):
 			if(x.on_click != None):
 				x.on_click(window)
 
+game1 = None
 def press_start_button(window):
 	"""开始按钮被按下"""
 	window.set_background()
@@ -26,6 +27,22 @@ def press_start_button(window):
 	game1.start_game()
 	box = gbgui.game_box.game_box(window)
 	box.draw_box()
+
+def press_black_button(window):
+	"""先手按钮被按下"""
+	game1.black = window.player
+
+def press_white_button(window):
+	"""后手按钮被按下"""
+	game1.white = window.player
+
+def press_random_button(window):
+	"""先手后手随机按钮被按下"""
+	r = random.randint(0, 1)
+	if r == 1:
+		press_black_button(window)
+	else:
+		press_white_button(window)
 
 def press_exit_button(window):
 	"""退出按钮被按下"""
@@ -44,3 +61,7 @@ def press_give_up_button(window):
 			window.current_game.end_game(winner = window.current_game.black)
 		else:
 			return
+
+if __name__ == '__main__':
+	r = random.randint(0, 1)
+	print r

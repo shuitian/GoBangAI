@@ -17,6 +17,7 @@ class MainWindow(object):
 		pygame.display.set_caption(u"五子棋".encode('utf-8'))
 		
 		self.sql = system.sql.sql()
+		self.player = system.sql.get_last_player()
 		self.buttons = []
 	
 	def set_game(self, game):

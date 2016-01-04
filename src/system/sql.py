@@ -6,7 +6,7 @@ class sql(object):
 	def __init__(self):
 		"""获取数据库连接"""
 		super(sql, self).__init__()
-		self.conn = self.create_table()
+		self.create_table()
 		# print "create_table"
 		
 	def __del__(self):
@@ -19,18 +19,19 @@ class sql(object):
 		"""如果数据库存在，则创建数据库并创建数据表，反之连接数据库"""
 		db = file_path.get_res_path('gobang.db')
 		if os.path.exists(db):
-			conn = sqlite3.connect(db)
+			self.conn = sqlite3.connect(db)
 		else:
-			conn = sqlite3.connect(db)
+			self.conn = sqlite3.connect(db)
 
 			print "Open Success"
 
-			conn.execute('''CREATE TABLE PLAYER(
+			self.conn.execute('''CREATE TABLE PLAYER(
 				name TEXT PRIMARY KEY   NOT NULL,
-				ai            TEXT      NOT NULL
+				ai            TEXT      NOT NULL,
+				last	TEXT
 			);''')
 
-			conn.execute('''CREATE TABLE GAME(
+			self.conn.execute('''CREATE TABLE GAME(
 				id INTEGER PRIMARY KEY,
 				startTime TEXT,
 				endTime TEXT,
@@ -39,8 +40,7 @@ class sql(object):
 				winner TEXT NOT NULL,
 				round INT
 			);''')
-			conn.insert_name("None", True)
-		return conn
+			self.insert_name("None", True)
 
 	def has_name(self, name):
 		"""PLAYER表中是否有指定名字"""
@@ -148,6 +148,17 @@ class sql(object):
 			return ((float)(len(table2)))/len(table1)
 		return None
 
+	def get_last_player(self):
+		"""获取最新玩家的名字"""
+		table = self.execute("SELECT * from PLAYER WHERE last IS NOT NULL").fetchone()
+		return table
+
+	def set_last_player(self, name):
+		"""设置最新玩家的名字"""
+		self.execute("UPDATE PLAYER SET last = NULL")
+		self.execute("UPDATE PLAYER SET last = 'last' WHERE name = " +  "'" + name + "'")
+		self.conn.commit()
+
 if __name__ == '__main__':
 	"""测试代码"""
 	s = sql()
@@ -156,7 +167,13 @@ if __name__ == '__main__':
 	print "是否有black:",s.has_name("black")
 	print "black是否是ai:",s.is_ai("black")
 	print "white是否是ai:",s.is_ai("white")
+	print "最后一次游戏玩家:",s.get_last_player()
+	s.set_last_player("black")
 	s.show_table("PLAYER")
+	print "最后一次游戏玩家:",s.get_last_player()
+	s.set_last_player("white")
+	s.show_table("PLAYER")
+	print "最后一次游戏玩家:",s.get_last_player()
 	import sys
 	sys.path.append("..")
 	import gb.game,player
