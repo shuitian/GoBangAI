@@ -26,5 +26,9 @@ class game(object):
 		"""结束游戏"""
 		self.in_progress = False
 		self.endTime = time.time()
+		self.winner = winner
 		self.window.sql.insert_game(self)
-		self.window.sql.show_table("GAME")
+		# self.window.sql.show_table("GAME")
+
+	def next_round(self):
+		self.round = self.round + 1

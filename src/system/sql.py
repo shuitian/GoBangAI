@@ -4,16 +4,19 @@ import file_path
 class sql(object):
 	"""处理数据库的类"""
 	def __init__(self):
+		"""获取数据库连接"""
 		super(sql, self).__init__()
 		self.conn = self.create_table()
-		print "create_table"
+		# print "create_table"
 		
 	def __del__(self):
+		"""关闭数据库连接"""
 		# super(sql, self).__del__()
-		print "close connection"
+		# print "close connection"
 		self.conn.close()
 
 	def create_table(self):
+		"""如果数据库存在，则创建数据库并创建数据表，反之连接数据库"""
 		db = file_path.get_res_path('gobang.db')
 		if os.path.exists(db):
 			conn = sqlite3.connect(db)
@@ -36,42 +39,48 @@ class sql(object):
 				winner TEXT NOT NULL,
 				round INT
 			);''')
+			conn.insert_name("None", True)
 		return conn
 
 	def has_name(self, name):
-		flag = self.execute("SELECT name, ai from PLAYER WHERE name = " +  "'" + name + "'")
+		"""PLAYER表中是否有指定名字"""
+		flag = self.execute("SELECT * from PLAYER WHERE name = " +  "'" + name + "'")
 		for x in flag:
 			return True
 		return False
 		
-
 	def show_table(self, table_name):
+		"""显示表中所有数据"""
 		table = self.execute("SELECT *  from " + table_name)
 		if table != None:
-			for x in table:
-				print x
+			print table.fetchall()
 
 	def insert_name(self, name, ai):
+		"""在PLAYER表中插入数据"""
 		if self.has_name(name):
-			print "Error: name ('" + name + "') is not unique!"
+			print "Error: name ('" + name + "') is not unique! Insert failed!"
 			return 
-		self.execute("""INSERT INTO PLAYER (NAME,AI) VALUES(""" + "'" + name + "'" + "," + "'" +str(ai) + "'" +")"
+		self.execute("""INSERT INTO PLAYER (NAME,AI) \
+			VALUES(""" + "'" + name + "'" + ","+ "'" +str(ai) + "'" +")"
 			)
 		self.conn.commit()
 
 	def is_ai(self, name):
-		table = self.execute("SELECT name, ai from PLAYER WHERE name = " +  "'" + name + "'")
+		"""该玩家是否是AI"""
+		table = self.execute("SELECT * from PLAYER WHERE name = " +  "'" + name + "'")
 		if table == None:
 			return False
 		else:
-			for x in table:
-				return x[1] == "True"
+			x = table.fetchone()
+			return x[1] == "True"
 
 	def execute(self, seq):
+		"""执行数据库语句"""
 		# print seq
 		return self.conn.execute(seq)
 
 	def insert_game(self, game):
+		"""在GAME表中插入一条数据"""
 		if game == None:
 			return
 		if game.startTime == None:
@@ -98,6 +107,7 @@ class sql(object):
 
 	
 	def insert_game_detail(self, startTime, endTime, blackName, whiteName, winner, round):
+		"""根据game数据的详情在GAME表中插入一条数据"""
 		self.execute("""INSERT INTO GAME (id,startTime,endTime,blackName,whiteName,winner,round) \
 			VALUES(null,""" + "'" + startTime + "'" + ","
 				+ "'" + endTime + "'" + "," 
@@ -108,20 +118,61 @@ class sql(object):
 			)
 		self.conn.commit()
 
+	def get_nr_victories(self, name):
+		"""获取该玩家的胜利场次"""
+		table = self.execute("SELECT * from GAME WHERE winner = " +  "'" + name + "'")
+		return len(table.fetchall())
+
+	def get_nr_games(self, name):
+		"""获取该玩家的总游戏场次"""
+		table = self.execute("SELECT * from GAME WHERE blackName = " +  "'" + name + "'" + " or whiteName = " +  "'" + name + "'")
+		return len(table.fetchall())
+
+	def get_rate_victories(self, name):
+		"""获取该玩家的胜率"""
+		return ((float)(self.get_nr_victories(name)))/self.get_nr_games(name)
+
+	def get_black_rate_victories(self, name):
+		"""获取该玩家的先手胜率"""
+		table1 = self.execute("SELECT * from GAME WHERE blackName = " +  "'" + name + "'").fetchall()
+		table2 = self.execute("SELECT * from GAME WHERE blackName = " +  "'" + name + "'" + " and winner = " +  "'" + name + "'").fetchall()
+		if len(table1) != 0:
+			return ((float)(len(table2)))/len(table1)
+		return None
+
+	def get_white_rate_victories(self, name):
+		"""获取该玩家的后手胜率"""
+		table1 = self.execute("SELECT * from GAME WHERE whiteName = " +  "'" + name + "'").fetchall()
+		table2 = self.execute("SELECT * from GAME WHERE whiteName = " +  "'" + name + "'" + " and winner = " +  "'" + name + "'").fetchall()
+		if len(table1) != 0:
+			return ((float)(len(table2)))/len(table1)
+		return None
+
 if __name__ == '__main__':
+	"""测试代码"""
 	s = sql()
 	s.insert_name("black", ai=True)
 	s.insert_name("white", ai=False)
-	print s.has_name("black")
-	print s.is_ai("black")
-	print s.is_ai("white")
+	print "是否有black:",s.has_name("black")
+	print "black是否是ai:",s.is_ai("black")
+	print "white是否是ai:",s.is_ai("white")
 	s.show_table("PLAYER")
 	import sys
 	sys.path.append("..")
 	import gb.game,player
 	black = player.player("black", False)
 	white = player.player("white", True)
-	g = gb.game.game(None, black, white)
+	g = gb.game.game(None, white,black )
+	g.winner = black
 	s.insert_game(g)
 	s.show_table("GAME")
-	
+	print "black胜利场次:",s.get_nr_victories("black")
+	print "white胜利场次:",s.get_nr_victories("white")
+	print "black游戏场次:",s.get_nr_games("black")
+	print "white游戏场次:",s.get_nr_games("white")
+	print "black胜率:",s.get_rate_victories("black")
+	print "white胜率:",s.get_rate_victories("white")
+	print "black先手胜率:",s.get_black_rate_victories("black")
+	print "white先手胜率:",s.get_black_rate_victories("white")
+	print "black后手胜率:",s.get_white_rate_victories("black")
+	print "white后手胜率:",s.get_white_rate_victories("white")
