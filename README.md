@@ -86,19 +86,15 @@
 	- 游戏开始时间
 - endTime
 	- 游戏结束时间
-- firstHandName
-	- 先手姓名
-- secondHandName
-	- 后手姓名
+- blackName
+	- 先手执黑姓名
+- whiteName
+	- 后手执白姓名
 - winner
 	- 胜利者的姓名
 - round
 	- 游戏在第几回合胜利
 	- 两方都下一子为一回合
-- width
-	- 棋盘宽度
-- heigth
-	- 棋盘高度
 
 ####玩家表player
 - name
@@ -107,6 +103,6 @@
 	- AI的姓名随机或者从名字表中选取
 - ai
 	- 该玩家是不是由ai控制
-	- `True`
-	- `False`
+	- `1`
+	- `0`
 
