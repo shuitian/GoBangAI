@@ -24,6 +24,7 @@ def press_start_button(window):
 	player2 = system.player.player("bob",False)
 	game1 = gb.game.game(window, player1, player2)
 	game1.start_game()
+	
 	box = gbgui.game_box.game_box(window)
 	box.draw_box()
 

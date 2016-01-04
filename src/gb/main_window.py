@@ -3,8 +3,7 @@ import pygame
 from pygame.locals import *
 import os,sys
 sys.path.append("..")
-import system.file_path
-import system.events
+import system.events,system.sql,system.file_path
 import gbgui.buttons
 
 class MainWindow(object):
@@ -17,13 +16,17 @@ class MainWindow(object):
 		self.screen = pygame.display.set_mode((self.width, self.height), 0, 32)
 		pygame.display.set_caption(u"五子棋".encode('utf-8'))
 		
-		self.current_game = None
+		self.sql = system.sql.sql()
 		self.buttons = []
 	
+	def set_game(self, game):
+		self.current_game = game
+
 	def handle_event(self):
 		"""处理事件信息"""
 		for event in pygame.event.get():
 			if event.type == QUIT:
+				# del self.sql
 				sys.exit()
 			elif event.type == MOUSEBUTTONDOWN:
 				system.events.press_mouse_button_down(self, event)
