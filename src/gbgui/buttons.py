@@ -8,11 +8,14 @@ class my_button(pygame.sprite.Sprite):
 		super(my_button, self).__init__()
 		self.name = name
 		self.on_click = click
+		self.image = None
+		self.rect = None
 
 	def render(self, surface, topleft):
 		"""渲染"""
 		self.rect.topleft = topleft
-		surface.blit(self.image,self.rect)
+		if self.image:
+			surface.blit(self.image,self.rect)
 
 	def is_over(self, point):
 		"""如果point在自身范围内，返回True"""
@@ -22,7 +25,7 @@ class image_button(my_button):
 	"""以图片为背景的按钮"""
 	def __init__(self, name, image_filename, click = None):
 		super(image_button, self).__init__(name, click)
-		self.image = pygame.image.load(system.file_path.get_res_path(image_filename))
+		self.image = pygame.image.load(system.file_path.get_res_path(image_filename)).convert_alpha()
 		self.rect = self.image.get_rect()
 
 class text_button(my_button):

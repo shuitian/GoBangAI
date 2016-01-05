@@ -18,17 +18,19 @@ class game(object):
 
 	def start_game(self):
 		"""开始游戏"""
-		self.window.set_game(self)
-		self.in_progress = True
-		self.startTime = time.time()
+		if not self.in_progress:
+			print 1
+			self.in_progress = True
+			self.startTime = time.time()
 
 	def end_game(self, winner):
 		"""结束游戏"""
-		self.in_progress = False
-		self.endTime = time.time()
-		self.winner = winner
-		self.window.sql.insert_game(self)
-		# self.window.sql.show_table("GAME")
+		if self.in_progress:
+			self.in_progress = False
+			self.endTime = time.time()
+			self.winner = winner
+			self.window.sql.insert_game(self)
+			# self.window.sql.show_table("GAME")
 
 	def next_round(self):
 		self.round = self.round + 1

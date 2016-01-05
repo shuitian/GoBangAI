@@ -1,19 +1,18 @@
 # GoBangAI
 ### 项目源码文件夹介绍
-- src
-	- python代码
-- docs
-	- 文档
-- setup.py
-	- 安装代码
-- setup.bat
-	- windows下实际安装文件
+- src(python代码)
+	- gb(项目入口)
+	- gbai(五子棋的AI相关代码)
+	- gbgui(GUI相关代码)
+	- system(全局和系统相关代码)
+- docs(文档)
+- setup.py(安装代码)
+- setup.bat(windows下实际安装文件)
+- res(资源文件夹)
 
 ### 项目中间文件以及可执行程序介绍
-- build
-	- 中间文件夹
-- dist
-	- 可执行程序
+- build(中间文件夹，不在git中)
+- dist(可执行程序，不在git中)
 
 ## 五子棋AI需求分析说明书
 版本 **1.0**
@@ -108,3 +107,36 @@
 - last
 	- 最后一次登录的玩家姓名
 
+## 源代码分析
+### gb/main.py
+程序入口
+
+### gb/main_window.py
+- 类MainWindow(程序主界面)
+
+### gb/game.py
+- 类game，每一场游戏都是一个game类
+
+### system/sql.py
+- 类sql，数据库连接，存储类
+
+### system/file_path.py
+获取资源文件路径的一些方法
+
+### system/events.py
+所有事件回调函数的集合，包括按钮点击事件，退出返回事件
+
+### system/player.py
+- 类player
+
+### gugui/buttons.py
+自制的按钮类，能够实现点击事件
+
+- 类my_button
+- 类image_button
+- 类text_button
+
+### gbgui/game_box.py
+棋盘类，包括棋盘的渲染等等
+
+- 类game_box

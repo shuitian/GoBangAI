@@ -17,7 +17,7 @@ class MainWindow(object):
 		pygame.display.set_caption(u"五子棋".encode('utf-8'))
 		
 		self.sql = system.sql.sql()
-		self.player = system.sql.get_last_player()
+		self.player = self.sql.get_last_player()
 		self.buttons = []
 	
 	def set_game(self, game):
@@ -32,10 +32,14 @@ class MainWindow(object):
 			elif event.type == MOUSEBUTTONDOWN:
 				system.events.press_mouse_button_down(self, event)
 
-	def add_button(self, button, position):
-		"""在屏幕上添加一个按钮"""
-		self.buttons.append(button)
+	def add_none_click_button(self, button, position):
+		"""在屏幕上添加一个无点击事件按钮"""
 		button.render(self.screen, position)
+
+	def add_button(self, button, position):
+		"""在屏幕上添加一个有点击事件按钮"""
+		self.add_none_click_button(button, position)
+		self.buttons.append(button)
 
 	def clear_button(self):
 		"""屏幕上的所有按钮不再响应事件"""
