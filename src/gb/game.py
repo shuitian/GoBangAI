@@ -33,4 +33,5 @@ class game(object):
 			# self.window.sql.show_table("GAME")
 
 	def next_round(self):
+		"""下一回合"""
 		self.round = self.round + 1

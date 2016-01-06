@@ -21,6 +21,7 @@ class MainWindow(object):
 		self.buttons = []
 	
 	def set_game(self, game):
+		"""设置当前游戏变量"""
 		self.current_game = game
 
 	def handle_event(self):
