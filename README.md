@@ -140,3 +140,11 @@
 棋盘类，包括棋盘的渲染等等
 
 - 类game_box
+
+## 流程图
+![流程图](http://i.imgur.com/v8fd5nf.png)
+
+## 界面设计
+![主界面](http://i.imgur.com/wx4QEmL.png)
+![开始游戏界面](http://i.imgur.com/wuAmD0k.png)
+![游戏界面](http://i.imgur.com/lUHk7WA.png)
