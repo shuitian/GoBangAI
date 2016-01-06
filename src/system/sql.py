@@ -155,6 +155,9 @@ class sql(object):
 
 	def set_last_player(self, name):
 		"""设置最新玩家的名字"""
+		table = self.execute("SELECT * from PLAYER WHERE name = " +  "'" + name + "'")
+		if table == None:
+			self.insert_name(name, False)
 		self.execute("UPDATE PLAYER SET last = NULL")
 		self.execute("UPDATE PLAYER SET last = 'last' WHERE name = " +  "'" + name + "'")
 		self.conn.commit()
