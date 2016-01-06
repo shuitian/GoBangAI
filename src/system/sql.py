@@ -155,7 +155,7 @@ class sql(object):
 
 	def set_last_player(self, name):
 		"""设置最新玩家的名字"""
-		table = self.execute("SELECT * from PLAYER WHERE name = " +  "'" + name + "'")
+		table = self.execute("SELECT * from PLAYER WHERE name = " +  "'" + name + "'").fetchone()
 		if table == None:
 			self.insert_name(name, False)
 		self.execute("UPDATE PLAYER SET last = NULL")
@@ -174,7 +174,7 @@ if __name__ == '__main__':
 	s.set_last_player("black")
 	s.show_table("PLAYER")
 	print "最后一次游戏玩家:",s.get_last_player()
-	s.set_last_player("white")
+	s.set_last_player("white1")
 	s.show_table("PLAYER")
 	print "最后一次游戏玩家:",s.get_last_player()
 	import sys
