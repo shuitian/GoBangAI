@@ -62,10 +62,11 @@ class MainWindow(object):
 	def display_player_name(self):
 		"""显示玩家姓名"""
 		player_name = gbgui.buttons.text_button(name = "player_name", text =self.player, click = None)
-		self.add_none_click_button(player_name, (self.width/2 + 2*player_name.rect.width, self.height/4*3 - player_name.rect.height/2))
+		self.add_none_click_button(player_name, (self.width/2 + 6*player_name.rect.width, self.height/4*3 - player_name.rect.height/2))
 	def change_player_name(self):
+		"""修改玩家姓名"""
 		new_player_name = gbgui.buttons.text_button(name = "new_player_name", text =u"修改玩家姓名", click = self.sql.set_last_player(self.player))
-		self.add_none_click_button(new_player_name, (self.width/2 + 2*new_player_name.rect.width, self.height/6*5 - new_player_name.rect.height/2))
+		self.add_button(new_player_name, (self.width/2 + 2*new_player_name.rect.width, self.height/6*5 - new_player_name.rect.height/2))
 	def main_loop(self):
 		"""主循环"""
 		self.set_background()
