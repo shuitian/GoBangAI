@@ -19,6 +19,7 @@ class MainWindow(object):
 		self.sql = system.sql.sql()
 		self.player = self.sql.get_last_player()
 		self.buttons = []
+		
 	
 	def set_game(self, game):
 		"""设置当前游戏变量"""
@@ -58,11 +59,19 @@ class MainWindow(object):
 		self.add_button(start_button, (self.width/2 - start_button.rect.width/2, self.height/4*3 - start_button.rect.height/2))
 		exit_button = gbgui.buttons.text_button(name = "exit", text = u"退出游戏", click = system.events.press_exit_button)
 		self.add_button(exit_button, (self.width/2 - start_button.rect.width/2, self.height/6*5 - start_button.rect.height/2))
-
+	def display_player_name(self):
+		"""显示玩家姓名"""
+		player_name = gbgui.buttons.text_button(name = "player_name", text =self.player, click = None)
+		self.add_none_click_button(player_name, (self.width/2 + 2*player_name.rect.width, self.height/4*3 - player_name.rect.height/2))
+	def change_player_name(self):
+		new_player_name = gbgui.buttons.text_button(name = "new_player_name", text =u"修改玩家姓名", click = self.sql.set_last_player(self.player))
+		self.add_none_click_button(new_player_name, (self.width/2 + 2*new_player_name.rect.width, self.height/6*5 - new_player_name.rect.height/2))
 	def main_loop(self):
 		"""主循环"""
 		self.set_background()
 		self.add_start_and_exit_button()
+		self.display_player_name()
+		self.change_player_name()
 		while True:
 			self.handle_event()	
 			pygame.display.update()

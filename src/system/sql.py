@@ -151,7 +151,7 @@ class sql(object):
 	def get_last_player(self):
 		"""获取最新玩家的名字"""
 		table = self.execute("SELECT * from PLAYER WHERE last IS NOT NULL").fetchone()
-		return table
+		return table[0]
 
 	def set_last_player(self, name):
 		"""设置最新玩家的名字"""
@@ -196,3 +196,4 @@ if __name__ == '__main__':
 	print "white先手胜率:",s.get_black_rate_victories("white")
 	print "black后手胜率:",s.get_white_rate_victories("black")
 	print "white后手胜率:",s.get_white_rate_victories("white")
+	print s.get_last_player()
