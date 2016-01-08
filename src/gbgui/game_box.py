@@ -18,7 +18,8 @@ class game_box(object):
 		"""在屏幕上绘制棋盘"""
 		self.draw_lines()
 		self.draw_points()
-		self.draw_buttons()
+		self.draw_texts()
+		self.draw_players()
 
 	def draw_lines(self):
 		"""画线"""
@@ -49,47 +50,66 @@ class game_box(object):
 		for point in points:
 			pygame.draw.circle(self.window.screen,[0,0,0],point,radius,0)
 
-	def draw_buttons(self):
+	def draw_texts(self):
 		"""绘制按钮"""
-		choose_text = gbgui.buttons.text_button(name = "choose_text", text = u"请选择先手后手", click = None)
-		self.window.add_none_click_button(choose_text, (self.window.width - (self.window.width - self.size)/4 - choose_text.rect.width/2, self.window.height/10 - choose_text.rect.height/2))
+		if not self.window.current_game:
+			return
+		if not self.window.current_game.in_progress:
+			choose_text = gbgui.buttons.text_button(name = "choose_text", text = u"请选择先手后手", click = None)
+			self.window.add_none_click_button(choose_text, (self.window.width - (self.window.width - self.size)/4 - choose_text.rect.width/2, self.window.height/10 - choose_text.rect.height/2))
 
-		btn_black_text = gbgui.buttons.text_button(name = "black_text", text = u"先手执黑", click = system.events.press_black_button)
-		btn_black_image = gbgui.buttons.image_button("black_image","black.png",system.events.press_black_button)
-		self.window.add_button(btn_black_image, (self.window.width - (self.window.width - self.size)/4 - (btn_black_image.rect.width-btn_black_text.rect.width)/2, self.window.height/5 - btn_black_image.rect.height/2))
-		self.window.add_button(btn_black_text, (self.window.width - (self.window.width - self.size)/4 - (btn_black_image.rect.width+btn_black_text.rect.width)/2, self.window.height/5 - btn_black_text.rect.height/2))
+			btn_black_text = gbgui.buttons.text_button(name = "black_text", text = u"先手执黑", click = system.events.press_black_button)
+			btn_black_image = gbgui.buttons.image_button("black_image","black.png",system.events.press_black_button)
+			self.window.add_button(btn_black_image, (self.window.width - (self.window.width - self.size)/4 - (btn_black_image.rect.width-btn_black_text.rect.width)/2, self.window.height/5 - btn_black_image.rect.height/2))
+			self.window.add_button(btn_black_text, (self.window.width - (self.window.width - self.size)/4 - (btn_black_image.rect.width+btn_black_text.rect.width)/2, self.window.height/5 - btn_black_text.rect.height/2))
 
-		btn_white_text = gbgui.buttons.text_button(name = "white_text", text = u"后手执白", click = system.events.press_white_button)
-		btn_white_image = gbgui.buttons.image_button("white_image","white.png",system.events.press_white_button)
-		self.window.add_button(btn_white_image, (self.window.width - (self.window.width - self.size)/4 - (btn_white_image.rect.width-btn_white_text.rect.width)/2, self.window.height/10*3 - btn_white_image.rect.height/2))
-		self.window.add_button(btn_white_text, (self.window.width - (self.window.width - self.size)/4 - (btn_white_image.rect.width+btn_white_text.rect.width)/2, self.window.height/10*3 - btn_white_text.rect.height/2))
+			btn_white_text = gbgui.buttons.text_button(name = "white_text", text = u"后手执白", click = system.events.press_white_button)
+			btn_white_image = gbgui.buttons.image_button("white_image","white.png",system.events.press_white_button)
+			self.window.add_button(btn_white_image, (self.window.width - (self.window.width - self.size)/4 - (btn_white_image.rect.width-btn_white_text.rect.width)/2, self.window.height/10*3 - btn_white_image.rect.height/2))
+			self.window.add_button(btn_white_text, (self.window.width - (self.window.width - self.size)/4 - (btn_white_image.rect.width+btn_white_text.rect.width)/2, self.window.height/10*3 - btn_white_text.rect.height/2))
 
-		btn_random_text = gbgui.buttons.text_button(name = "random_text", text = u"随机选择", click = system.events.press_random_button)
-		self.window.add_button(btn_random_text, (self.window.width - (self.window.width - self.size)/4 - btn_random_text.rect.width/2, self.window.height/5*2 - btn_random_text.rect.height/2))
-	
+			btn_random_text = gbgui.buttons.text_button(name = "random_text", text = u"随机选择", click = system.events.press_random_button)
+			self.window.add_button(btn_random_text, (self.window.width - (self.window.width - self.size)/4 - btn_random_text.rect.width/2, self.window.height/5*2 - btn_random_text.rect.height/2))
+		else:
+			give_up_button = gbgui.buttons.text_button(name = "give_up", text = u"认输", click = system.events.press_give_up_button)
+			self.window.add_button(give_up_button, (self.window.width - (self.window.width - self.size)/4 - give_up_button.rect.width/2, self.window.height/10*7 - give_up_button.rect.height/2))
+
 		btn_return_text = gbgui.buttons.text_button(name = "return_text", text = u"返回主菜单", click = system.events.press_return_button)
 		self.window.add_button(btn_return_text, (self.window.width - (self.window.width - self.size)/4 - btn_return_text.rect.width/2, self.window.height/5*4 - btn_return_text.rect.height/2))	
 
 		btn_exit_text = gbgui.buttons.text_button(name = "exit_text", text = u"退出游戏", click = system.events.press_exit_button)
 		self.window.add_button(btn_exit_text, (self.window.width - (self.window.width - self.size)/4 - btn_exit_text.rect.width/2, self.window.height/10*9 - btn_exit_text.rect.height/2))	
 
+	def draw_players(self):
+		btn_black_image = gbgui.buttons.image_button("black_image","black.png")
+		btn_white_image = gbgui.buttons.image_button("white_image","white.png")
+		
 		player1_text = gbgui.buttons.text_button(name = "player1_text", text = self.window.player)
-		self.window.add_button(player1_text, ((self.window.width - self.size)/4 - player1_text.rect.width/2, self.window.height/10*9 - player1_text.rect.height/2))	
+		self.window.add_button(player1_text, ((self.window.width - self.size)/4 - (btn_black_image.rect.width+player1_text.rect.width)/2, self.window.height/10*9 - player1_text.rect.height/2))	
 
 		vs_text = gbgui.buttons.text_button(name = "vs_text", text = "VS", size = 72)
 		self.window.add_button(vs_text, ((self.window.width - self.size)/4 - vs_text.rect.width/2, self.window.height/2 - vs_text.rect.height/2))	
 
-		player2_text = gbgui.buttons.text_button(name = "player2_text", text = u"AI")
-		self.window.add_button(player2_text, ((self.window.width - self.size)/4 - player2_text.rect.width/2, self.window.height/10*1 - player2_text.rect.height/2))	
+		if self.window.player == self.window.current_game.black:
+			text1 = self.window.current_game.white
+		else :
+			text1 = self.window.current_game.black
+		player2_text = gbgui.buttons.text_button(name = "player2_text", text = text1)
+		self.window.add_button(player2_text, ((self.window.width - self.size)/4 - (btn_black_image.rect.width+player2_text.rect.width)/2, self.window.height/10*1 - player2_text.rect.height/2))	
+		if self.window.current_game.in_progress:
+			if self.window.current_game.black == self.window.player:
+				self.window.add_button(btn_black_image, ((self.window.width - self.size)/4 - (btn_black_image.rect.width-player1_text.rect.width)/2, self.window.height/10*9 - btn_black_image.rect.height/2))
+				self.window.add_button(btn_white_image, ((self.window.width - self.size)/4 - (btn_white_image.rect.width-player2_text.rect.width)/2, self.window.height/10 - btn_white_image.rect.height/2))
+			else :
+				self.window.add_button(btn_black_image, ((self.window.width - self.size)/4 - (btn_black_image.rect.width-player2_text.rect.width)/2, self.window.height/10 - btn_black_image.rect.height/2))
+				self.window.add_button(btn_white_image, ((self.window.width - self.size)/4 - (btn_white_image.rect.width-player1_text.rect.width)/2, self.window.height/10*9 - btn_white_image.rect.height/2))
+
+	def update(self):
+		self.draw_box()
 		# """for test"""
 		# p = system.file_path.get_res_path('white_point.png')
 		# background = pygame.image.load(p).convert_alpha()
 		# self.window.screen.blit(background, [points[0][0]-18,points[0][1]-18])
-
-
-	# def draw_buttons(self):
-	# 	give_up_button = gbgui.buttons.text_button(name = "give_up", text = u"认输", click = system.events.press_give_up_button)
-	# 	self.window.add_button(give_up_button, (self.window.width - (self.window.width - self.size)/4 - give_up_button.rect.width/2, self.window.height*4/5 - give_up_button.rect.height/2))
 
 	def get_screen_position_from_game_point(self, place):
 		"""根据棋盘点位置获取屏幕点位置"""

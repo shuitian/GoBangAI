@@ -17,11 +17,12 @@ class MainWindow(object):
 		pygame.display.set_caption(u"五子棋".encode('utf-8'))
 		
 		self.sql = system.sql.sql()
-		self.player = self.sql.get_last_player()
+		self.player = self.sql.get_last_player_name()
 		self.buttons = []
 		self.texts = []
 		self.new_name = []
 		self.modify = False
+		self.current_game = None
 	
 	def set_game(self, game):
 		"""设置当前游戏变量"""
@@ -50,10 +51,12 @@ class MainWindow(object):
 		self.player = "".join(self.new_name)
 		self.new_player_name.text = self.player
 		self.add_none_click_button(self.new_player_name, (self.width/4*3 - self.new_player_name.get_rect().width/2, self.height/10*5 - self.new_player_name.get_rect().height/2))
-		self.show_texts()
 
 	def show_texts(self):
 		self.set_background()
+		if self.current_game and self.current_game.game_box:
+			self.current_game.game_box.update()
+			return 
 		for x in self.texts:
 			x[0].render(self.screen, x[1])
 		for x in self.buttons:
@@ -96,7 +99,7 @@ class MainWindow(object):
 
 	def display_player_name(self):
 		"""显示玩家姓名"""
-		self.player = self.sql.get_last_player()
+		self.player = self.sql.get_last_player_name()
 		self.player_name = gbgui.buttons.text_button(name = "player_name", text =self.player, click = None)
 		self.add_none_click_button(self.player_name, (self.width/4*3 - self.player_name.rect.width/2, self.height/10*7 - self.player_name.rect.height/2))
 		self.modify_player_name = gbgui.buttons.text_button(name = "modify_player_name", text =u"修改玩家姓名", click = system.events.press_modify_player_name)
@@ -124,6 +127,7 @@ class MainWindow(object):
 		"""主循环"""
 		self.init()
 		while True:
+			self.show_texts()
 			self.handle_event()	
 			pygame.display.update()
 

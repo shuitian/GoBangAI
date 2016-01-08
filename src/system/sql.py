@@ -53,8 +53,8 @@ class sql(object):
 		
 	def show_table(self, table_name):
 		"""显示表中所有数据"""
-		if name == None:
-			name = "None"
+		if table_name == None:
+			table_name = "None"
 		table = self.execute("SELECT *  from " + table_name)
 		if table != None:
 			print table.fetchall()
@@ -99,20 +99,20 @@ class sql(object):
 			endTime = "None"
 		else:
 			endTime = time.ctime(game.endTime)
-		if game.black == None or game.black.name == None:
+		if game.black == None:
 			blackName = "None"
 		else:
-			blackName = game.black.name
-		if game.white == None or game.white.name == None:
+			blackName = game.black
+		if game.white == None:
 			whiteName = "None"
 		else:
-			whiteName = game.white.name
-		if game.winner == None or game.winner.name == None:
+			whiteName = game.white
+		if game.winner == None:
 			winner = "None"
 		else:
-			winner = game.winner.name
+			winner = game.winner
 		self.insert_game_detail(startTime, endTime, blackName, whiteName, winner, game.round)
-
+		# self.show_table("GAME")
 	
 	def insert_game_detail(self, startTime, endTime, blackName, whiteName, winner, round):
 		"""根据game数据的详情在GAME表中插入一条数据"""
@@ -156,14 +156,14 @@ class sql(object):
 			return ((float)(len(table2)))/len(table1)
 		return None
 
-	def get_last_player(self):
+	def get_last_player_name(self):
 		"""获取最新玩家的名字"""
 		table = self.execute("SELECT * from PLAYER WHERE last IS NOT NULL").fetchone()
 		if table == None:
 			return "None"
 		return table[0]
 
-	def set_last_player(self, name):
+	def set_last_player_name(self, name):
 		"""设置最新玩家的名字"""
 		if name == None or name == "":
 			name = "None"
@@ -182,20 +182,22 @@ if __name__ == '__main__':
 	print "是否有black:",s.has_name("black")
 	print "black是否是ai:",s.is_ai("black")
 	print "white是否是ai:",s.is_ai("white")
-	print "最后一次游戏玩家:",s.get_last_player()
-	s.set_last_player("black")
+	print "最后一次游戏玩家:",s.get_last_player_name()
+	s.set_last_player_name("black")
 	s.show_table("PLAYER")
-	print "最后一次游戏玩家:",s.get_last_player()
-	s.set_last_player("white1")
+	print "最后一次游戏玩家:",s.get_last_player_name()
+	s.set_last_player_name("white1")
 	s.show_table("PLAYER")
-	print "最后一次游戏玩家:",s.get_last_player()
+	print "最后一次游戏玩家:",s.get_last_player_name()
 	import sys
 	sys.path.append("..")
 	import gb.game,player
 	black = player.player("black", False)
 	white = player.player("white", True)
-	g = gb.game.game(None, white,black )
-	g.winner = black
+	g = gb.game.game(None)
+	g.black = black.name
+	g.white = white.name
+	g.winner = black.name
 	s.insert_game(g)
 	s.show_table("GAME")
 	print "black胜利场次:",s.get_nr_victories("black")
@@ -208,4 +210,4 @@ if __name__ == '__main__':
 	print "white先手胜率:",s.get_black_rate_victories("white")
 	print "black后手胜率:",s.get_white_rate_victories("black")
 	print "white后手胜率:",s.get_white_rate_victories("white")
-	print s.get_last_player()
+	print s.get_last_player_name()
