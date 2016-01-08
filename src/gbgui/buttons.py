@@ -32,6 +32,14 @@ class text_button(my_button):
 	"""以文字为背景的按钮"""
 	def __init__(self, name, text, size = 30, font = system.file_path.get_res_path("STXINGKA.TTF"), color = (0,0,0), click = None):
 		super(text_button, self).__init__(name, click)
+		# print text.encode("utf-8")
 		my_font = pygame.font.Font(font, size)
 		self.image = my_font.render(text, True, color)
 		self.rect = self.image.get_rect()
+
+class edit_text(text_button):
+	"""输入框"""
+	def __init__(self, name, size = 30, font = system.file_path.get_res_path("STXINGKA.TTF"), color = (125,125,125)):
+		super(edit_text, self).__init__(name, u"请输入您的姓名:", size, font, color)
+		
+		

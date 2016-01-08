@@ -57,6 +57,8 @@ class sql(object):
 
 	def insert_name(self, name, ai):
 		"""在PLAYER表中插入数据"""
+		if name == "":
+			name = None
 		if self.has_name(name):
 			print "Error: name ('" + name + "') is not unique! Insert failed!"
 			return 
@@ -151,6 +153,8 @@ class sql(object):
 	def get_last_player(self):
 		"""获取最新玩家的名字"""
 		table = self.execute("SELECT * from PLAYER WHERE last IS NOT NULL").fetchone()
+		if table == None:
+			return "None"
 		return table[0]
 
 	def set_last_player(self, name):

@@ -52,7 +52,7 @@ def press_exit_button(window):
 def press_return_button(window):
 	"""返回按钮被按下"""
 	window.set_background()
-	window.add_start_and_exit_button()
+	window.add_start_exit_player_button()
 
 def press_give_up_button(window):
 	"""按下认输按钮"""
@@ -67,6 +67,16 @@ def press_give_up_button(window):
 			window.current_game.end_game(winner = window.current_game.black)
 		else:
 			return
+
+def press_modify_player_name(window):
+	window.change_player_name()
+
+def press_cancel_change_player_name(window):
+	press_return_button(window)
+
+def press_confirm_change_player_name(window):
+	window.sql.set_last_player(''.join(window.new_name))
+	press_return_button(window)
 
 if __name__ == '__main__':
 	r = random.randint(0, 1)
