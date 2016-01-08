@@ -12,7 +12,7 @@ def press_mouse_button_down(window, event):
 
 def press_left_mouse_button_down(window, event):
 	"""响应鼠标左键点击事件"""
-	for x in window.buttons:
+	for [x, pos] in window.buttons:
 		if x != None and x.is_over(pygame.mouse.get_pos()):
 			if(x.on_click != None):
 				x.on_click(window)
@@ -51,8 +51,7 @@ def press_exit_button(window):
 
 def press_return_button(window):
 	"""返回按钮被按下"""
-	window.set_background()
-	window.add_start_exit_player_button()
+	window.init()
 
 def press_give_up_button(window):
 	"""按下认输按钮"""

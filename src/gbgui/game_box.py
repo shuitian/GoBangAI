@@ -72,6 +72,15 @@ class game_box(object):
 
 		btn_exit_text = gbgui.buttons.text_button(name = "exit_text", text = u"退出游戏", click = system.events.press_exit_button)
 		self.window.add_button(btn_exit_text, (self.window.width - (self.window.width - self.size)/4 - btn_exit_text.rect.width/2, self.window.height/10*9 - btn_exit_text.rect.height/2))	
+
+		player1_text = gbgui.buttons.text_button(name = "player1_text", text = self.window.player)
+		self.window.add_button(player1_text, ((self.window.width - self.size)/4 - player1_text.rect.width/2, self.window.height/10*9 - player1_text.rect.height/2))	
+
+		vs_text = gbgui.buttons.text_button(name = "vs_text", text = "VS", size = 72)
+		self.window.add_button(vs_text, ((self.window.width - self.size)/4 - vs_text.rect.width/2, self.window.height/2 - vs_text.rect.height/2))	
+
+		player2_text = gbgui.buttons.text_button(name = "player2_text", text = u"AI")
+		self.window.add_button(player2_text, ((self.window.width - self.size)/4 - player2_text.rect.width/2, self.window.height/10*1 - player2_text.rect.height/2))	
 		# """for test"""
 		# p = system.file_path.get_res_path('white_point.png')
 		# background = pygame.image.load(p).convert_alpha()

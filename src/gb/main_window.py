@@ -19,7 +19,9 @@ class MainWindow(object):
 		self.sql = system.sql.sql()
 		self.player = self.sql.get_last_player()
 		self.buttons = []
+		self.texts = []
 		self.new_name = []
+		self.modify = False
 	
 	def set_game(self, game):
 		"""设置当前游戏变量"""
@@ -33,37 +35,64 @@ class MainWindow(object):
 				sys.exit()
 			elif event.type == MOUSEBUTTONDOWN:
 				system.events.press_mouse_button_down(self, event)
+			elif event.type == KEYDOWN and self.modify == True:
+				self.append_new_name(event.key)
 
+	def append_new_name(self, key):
+		if key == K_BACKSPACE and len(self.new_name)>=1:
+			self.new_name = self.new_name[:-1]
+		elif len(self.new_name)>=10:
+			return
+		else:
+			alpha_bet = [(x+97)for x in xrange(0,26)]
+			if key in alpha_bet:
+				self.new_name.append(chr(key))
+		self.player = "".join(self.new_name)
+		self.new_player_name.text = self.player
+		self.add_none_click_button(self.new_player_name, (self.width/4*3 - self.new_player_name.get_rect().width/2, self.height/10*5 - self.new_player_name.get_rect().height/2))
+		self.show_texts()
+
+	def show_texts(self):
+		self.set_background()
+		for x in self.texts:
+			x[0].render(self.screen, x[1])
+		for x in self.buttons:
+			x[0].render(self.screen, x[1])
+				
 	def add_none_click_button(self, button, position):
 		"""在屏幕上添加一个无点击事件按钮"""
 		button.render(self.screen, position)
+		for btn in self.texts:
+			if button.name == btn[0].name:
+				self.texts.remove(btn)
+				break
+		self.texts.append([button, position])
 
 	def add_button(self, button, position):
 		"""在屏幕上添加一个有点击事件按钮"""
-		self.add_none_click_button(button, position)
+		button.render(self.screen, position)
 		for btn in self.buttons:
-			if button.name == btn.name:
-				return;
-		self.buttons.append(button)
+			if button.name == btn[0].name:
+				self.buttons.remove(btn)
+				break
+		self.buttons.append([button, position])
 
 	def clear_buttons(self):
 		"""屏幕上的所有按钮不再响应事件"""
-		self.button = []
+		self.buttons = []
+		self.texts = []
 
 	def set_background(self, background_image_filename = system.file_path.get_res_path('background.png')):
 		"""设置窗口背景"""
-		self.clear_buttons()
 		background = pygame.image.load(background_image_filename).convert()	
 		self.screen.blit(background, (0,0))
 
-	def add_start_exit_player_button(self):
+	def add_start_and_exit_button(self):
 		"""添加开始和结束按钮"""
 		start_button = gbgui.buttons.text_button(name = "start", text = u"开始游戏", click = system.events.press_start_button)
 		self.add_button(start_button, (self.width/2 - start_button.rect.width/2, self.height/10*7 - start_button.rect.height/2))
 		exit_button = gbgui.buttons.text_button(name = "exit", text = u"退出游戏", click = system.events.press_exit_button)
 		self.add_button(exit_button, (self.width/2 - start_button.rect.width/2, self.height/10*8 - start_button.rect.height/2))
-
-		self.display_player_name()
 
 	def display_player_name(self):
 		"""显示玩家姓名"""
@@ -75,17 +104,25 @@ class MainWindow(object):
 
 	def change_player_name(self):
 		"""修改玩家姓名"""
-		self.new_player_name = gbgui.buttons.edit_text(name = "new_player_name")
-		self.add_button(self.new_player_name, (self.width/4*3 - self.new_player_name.rect.width/2, self.height/10*5 - self.new_player_name.rect.height/2))
+		self.modify = True
+		self.new_player_name = gbgui.buttons.edit_text(name = "new_player_name", text = u"请输入您的姓名:")
+		self.add_none_click_button(self.new_player_name, (self.width/4*3 - self.new_player_name.rect.width/2, self.height/10*5 - self.new_player_name.rect.height/2))
 		self.confirm_button = gbgui.buttons.text_button(name = "confirm_button", text =u"确认修改", click = system.events.press_confirm_change_player_name)
 		self.cancel_button = gbgui.buttons.text_button(name = "cancel_button", text =u"取消", click = system.events.press_cancel_change_player_name)
 		self.add_button(self.confirm_button, (self.width/4*3 - (self.confirm_button.rect.width + self.cancel_button.rect.width + 50)/2, self.height/10*6 - self.confirm_button.rect.height/2))
 		self.add_button(self.cancel_button, (self.width/4*3 - (-self.confirm_button.rect.width + self.cancel_button.rect.width)/2, self.height/10*6 - self.cancel_button.rect.height/2))
 
+	def init(self):
+		self.clear_buttons()
+		self.set_background()
+		self.add_start_and_exit_button()
+		self.display_player_name()
+		self.new_name = []
+		self.modify = False
+
 	def main_loop(self):
 		"""主循环"""
-		self.set_background()
-		self.add_start_exit_player_button()
+		self.init()
 		while True:
 			self.handle_event()	
 			pygame.display.update()

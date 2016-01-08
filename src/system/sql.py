@@ -44,6 +44,8 @@ class sql(object):
 
 	def has_name(self, name):
 		"""PLAYER表中是否有指定名字"""
+		if name == None:
+			name = "None"
 		flag = self.execute("SELECT * from PLAYER WHERE name = " +  "'" + name + "'")
 		for x in flag:
 			return True
@@ -51,14 +53,16 @@ class sql(object):
 		
 	def show_table(self, table_name):
 		"""显示表中所有数据"""
+		if name == None:
+			name = "None"
 		table = self.execute("SELECT *  from " + table_name)
 		if table != None:
 			print table.fetchall()
 
 	def insert_name(self, name, ai):
 		"""在PLAYER表中插入数据"""
-		if name == "":
-			name = None
+		if name == "" or name == None:
+			name = "None"
 		if self.has_name(name):
 			print "Error: name ('" + name + "') is not unique! Insert failed!"
 			return 
@@ -69,6 +73,8 @@ class sql(object):
 
 	def is_ai(self, name):
 		"""该玩家是否是AI"""
+		if name == None:
+			name = "None"
 		table = self.execute("SELECT * from PLAYER WHERE name = " +  "'" + name + "'")
 		if table == None:
 			return False
@@ -159,6 +165,8 @@ class sql(object):
 
 	def set_last_player(self, name):
 		"""设置最新玩家的名字"""
+		if name == None or name == "":
+			name = "None"
 		table = self.execute("SELECT * from PLAYER WHERE name = " +  "'" + name + "'").fetchone()
 		if table == None:
 			self.insert_name(name, False)
